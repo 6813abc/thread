@@ -1,9 +1,6 @@
 package com.cyg.thread.thread;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 
 /**
  * 线程和数据库连接这些资源都是非常宝贵的资源。那么每次需要的时候创建,不需要的时候销
@@ -12,7 +9,7 @@ import java.util.concurrent.ScheduledExecutorService;
  * @author cyg
  * @date 2019/3/5 下午9:37
  **/
-public class ThreadPool implements Runnable {
+public class ThreadPool extends Thread{
 
     @Override
     public void run() {
@@ -42,18 +39,18 @@ public class ThreadPool implements Runnable {
         //3.newScheduledThreadPool:
         //创建一个线程池,它可安排在给定延迟后运行命令或者定期地执行.
         ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(3);
-        scheduledThreadPool.schedule(newRunnable() {
+        scheduledThreadPool.schedule(new Runnable() {
             @Override
-            public void run () {
+            public void run() {
                 System.out.println("延迟三秒");
             }
-        },3, TimeUnit.SECONDS);
-        scheduledThreadPool.scheduleAtFixedRate(newRunnable() {
+        }, 3, TimeUnit.SECONDS);
+        scheduledThreadPool.scheduleAtFixedRate(new Runnable() {
             @Override
-            public void run () {
+            public void run() {
                 System.out.println("延迟 1 秒后每三秒执行一次");
             }
-        },1, 3, TimeUnit.SECONDS);
+        },1,3,TimeUnit.SECONDS);
         //4.newSingleThreadExecutor: Executors.newSingleThreadExecutor()返回一个线程池(这个线程池只有一个线程),这个线程
         //池可以在线程死后(或发生异常时)重新启动一个线程来替代原来的线程继续执行下去!
     }
